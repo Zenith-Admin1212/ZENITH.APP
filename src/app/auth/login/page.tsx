@@ -76,7 +76,6 @@ export default function LoginPage() {
           })
         }
       })
-      .catch(() => { /* ignore — don't block login if settings fetch fails */ })
   }, [])
 
   const clearMessages = () => { setError(null); setSuccessMsg(null) }
