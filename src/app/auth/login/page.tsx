@@ -63,20 +63,24 @@ export default function LoginPage() {
 
   // Check maintenance mode on mount
   useEffect(() => {
-    supabase
-      .from('app_settings')
-      .select('value')
-      .eq('key', 'maintenance_mode')
-      .single()
-      .then(({ data }) => {
-        if (data?.value?.enabled) {
-          setMaintenance({
-            on:      true,
-            message: data.value.message ?? 'ZENITH is currently undergoing maintenance. Back soon!',
-          })
-        }
-      })
-  }, [])
+  supabase
+    .from('settings')
+    .select('value')
+    .eq('key', 'maintenance_mode')
+    .single()
+    .then((result) => {
+      const data = result.data
+
+      if (data?.value?.enabled) {
+        setMaintenance({
+          on: true,
+          message:
+            data.value.message ??
+            'ZENITH is currently undergoing maintenance. Back soon!'
+        })
+      }
+    })
+}, [])
 
   const clearMessages = () => { setError(null); setSuccessMsg(null) }
 
