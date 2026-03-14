@@ -62,26 +62,26 @@ export default function LoginPage() {
   const [maintenance, setMaintenance] = useState<{ on: boolean; message: string } | null>(null)
 
   // Check maintenance mode on mount
-  useEffect(() => {
-  supabase
-    .from('settings')
-    .select('value')
-    .eq('key', 'maintenance_mode')
-    .single()
-    .then((result) => {
-      const data = result.data
+ useEffect(() => {
+  const checkMaintenance = async () => {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'maintenance_mode')
+      .single()
 
-      if (data?.value?.enabled) {
-        setMaintenance({
-          on: true,
-          message:
-            data.value.message ??
-            'ZENITH is currently undergoing maintenance. Back soon!'
-        })
-      }
-    })
+    if (data?.value?.enabled) {
+      setMaintenance({
+        on: true,
+        message:
+          data.value.message ??
+          'ZENITH is currently undergoing maintenance. Back soon!'
+      })
+    }
+  }
+
+  checkMaintenance()
 }, [])
-
   const clearMessages = () => { setError(null); setSuccessMsg(null) }
 
   const handleError = useCallback((err: unknown) => {
